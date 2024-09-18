@@ -12,7 +12,6 @@ def checkout(skus):
     if not skus:
         return 0
     
-    
     for item in skus:
         if item not in prices:
             return -1
@@ -57,10 +56,12 @@ def test_checkout():
 
     assert checkout("F") == 10
     assert checkout("FFFF") == 30
+    print(checkout("FFFFF"))
     assert checkout("FFFFF") == 30
     assert checkout("BBBEEEFFFF") == 195
 
 test_checkout()
+
 
 
 
