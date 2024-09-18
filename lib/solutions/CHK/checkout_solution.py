@@ -47,24 +47,28 @@ def checkout(skus):
         paid_u_count = u_count - free_u_count
         item_counts['U'] = paid_u_count
     
-    group_items = special_offers['group_discount'][0]
-    group_count = sum(item_counts.get(item,0) for item in group_items)
-    group_offer_count = group_count//special_offers['group_discount'][1]
-    total_cost += group_offer_count*special_offers['group_discount'][2]
-    remaining_group_count = group_count%special_offers['group_discount'][1]
 
-    for item in group_items:
-        if item in item_counts:
-            if item_counts[item] <= remaining_group_count:
-                remaining_group_count -= item_counts[item]
-                item_counts[item] = 0
-            else:
-                item_counts[item] -= remaining_group_count
-                remaining_group_count = 0
+    group_size = special_offers['group_discount'][1]
+    group_items = special_offers['group_discount'][0]
+    group_price = special_offers['group_discount'][2]
+    group_count = sum(item_counts.get(item,0) for item in group_items)
+    group_offer_count = group_count//group_size
+    total_cost += group_offer_count*group_price
+
+    if group_offer_count>0:
+        sorted_group_items = sorted(group_items, key=lambda item:prices[item], reverse=True)
+        items_to_deduct = group_offer_count * group_size
+        for item in sorted_group_items:
+            while items_to_deduct>0 and item_counts.get(item,0) > 0:
+                item_counts[item] -=1
+                items_to_deduct -=1
+                if items_to_deduct ==0:
+                    break
 
     for item, count in item_counts.items():
         if item in special_offers and item not in ['F','U','N','R']:
-            for offer_count, offer_price in sorted(special_offers[item], reverse=True):
+            for offer in sorted(special_offers[item], key=lambda x: x[0], reverse=True):
+                offer_count, offer_price = offer
                 applicable_offers = count // offer_count
                 total_cost += applicable_offers*offer_price
                 count %= offer_count
@@ -104,3 +108,4 @@ def test_checkout():
     assert checkout("STXYZ") == 82
 
 test_checkout()
+
