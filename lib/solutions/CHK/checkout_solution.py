@@ -50,7 +50,7 @@ def checkout(skus):
     group_items = special_offers['group_discount'][0]
     group_count = sum(item_counts.get(item,0) for item in group_items)
     group_offer_count = group_count//special_offers['group_discount'][1]
-    total_cost += group_count*special_offers['group_discount'][2]
+    total_cost += group_offer_count*special_offers['group_discount'][2]
     remaining_group_count = group_count%special_offers['group_discount'][1]
 
     for item in group_items:
