@@ -100,7 +100,7 @@ def test_checkout():
     assert checkout("K") == 70
     #assert checkout("ABCDEFGHIJKLMNOPQRSTUVWXYZ") == 965
 
-    assert("STX") == 45
-    assert("STXYZ") == 90
+    assert checkout("STX") == 45
+    assert checkout("STXYZ") == 90
 
 test_checkout()
