@@ -24,9 +24,12 @@ def checkout(skus):
         if 'B' in item_counts:
             item_counts['B'] = max(0, item_counts['B'] -free_b_count)
         
-    if 'F' in item_counts and item_counts['F'] >=3:
-        free_f_count = item_counts['F'] //3
-        item_counts['F'] -= free_f_count
+    if 'F' in item_counts:
+        f_count = item_counts['F']
+        group_of_three = f_count //3
+        remaining_fs = f_count %3
+        paid_f_count = (group_of_three*2) + remaining_fs
+        item_counts['F'] = paid_f_count
 
     for item, count in item_counts.items():
         if item in special_offers:
@@ -59,4 +62,5 @@ def test_checkout():
     print(checkout("BBBEEEFFFF"))
 
 test_checkout()
+
 
