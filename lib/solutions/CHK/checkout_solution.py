@@ -78,6 +78,7 @@ def test_checkout():
     assert checkout("VVV") == 130
     assert checkout("UUUU") == 120
     assert checkout("VVVV") == 180
+    assert checkout("VVUUUUQQQ") == 290
 
 test_checkout()
 
