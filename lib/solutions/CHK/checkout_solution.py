@@ -17,6 +17,11 @@ def checkout(skus):
             return -1
         item_counts[item] = item_counts.get(item, 0) +1
     
+    if 'E' in item_counts and item_counts['E'] >=2:
+        free_b_count = item_counts['E'] // 2
+        if 'B' in item_counts:
+            item_counts['B'] = max(0, item_counts['B'] -free_b_count)
+
     for item, count in item_counts.items():
         if item in special_offers:
             for offer_count, offer_price in sorted(special_offers[item], reverse=True):
@@ -27,20 +32,18 @@ def checkout(skus):
         else:
             total_cost += count*prices[item]
     
-    if 'E' in item_counts and item_counts['E'] >=2:
-        free_b_count = item_counts['E'] //2
-        if 'B' in item_counts:
-            item_counts['B'] = max(0, item_counts['B'] - free_b_count)
-            total_cost -= min(free_b_count, item_counts['B'])*prices['B']
-    
     return total_cost
 
 def test_checkout():
     assert checkout("A") == 50
     assert checkout("B") == 30
     assert checkout("ABCD") == 115
+    assert checkout("ABCDE") == 155
     assert checkout("AAA") == 130
     assert checkout("AAAAA") == 200
+    assert checkout("BB") == 45
+    assert checkout("BBBEEE") == 160
 
 test_checkout()
+
 
