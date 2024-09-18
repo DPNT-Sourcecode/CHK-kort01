@@ -84,4 +84,3 @@ def test_checkout():
     assert checkout("ABCDEFGHIJKLMNOPQRSTUVWXYZ") == 965
 
 test_checkout()
-
