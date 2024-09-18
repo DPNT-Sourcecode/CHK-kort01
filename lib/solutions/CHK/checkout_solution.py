@@ -26,15 +26,15 @@ def checkout(skus):
         
     if 'F' in item_counts:
         f_count = item_counts['F']
-        group_of_three = f_count //3
-        remaining_fs = f_count %3
-        paid_f_count = (group_of_three*2) + remaining_fs
+        free_f_count = f_count//3
+        paid_f_count = f_count - free_f_count
         item_counts['F'] = paid_f_count
 
     for item, count in item_counts.items():
-        if item in special_offers:
+        if item in special_offers and item != 'F':
             for offer_count, offer_price in sorted(special_offers[item], reverse=True):
-                total_cost += (count // offer_count)*offer_price
+                applicable_offers = count // offer_count
+                total_cost += applicable_offers*offer_price
                 count %= offer_count
             
             total_cost += count*prices[item]
@@ -58,9 +58,9 @@ def test_checkout():
     assert checkout("F") == 10
     assert checkout("FFFF") == 30
 
-    #assert checkout("BBBEEEFFFF") == 15
-    print(checkout("BBBEEEFFFF"))
+    assert checkout("BBBEEEFFFF") == 195
 
 test_checkout()
+
 
 
