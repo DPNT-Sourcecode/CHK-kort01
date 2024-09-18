@@ -4,4 +4,3 @@ def compute(x, y):
         return x+y
     else:
         raise ValueError("Both parameters must be integers between 0 and 100")
-
