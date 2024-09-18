@@ -19,7 +19,7 @@ def checkout(skus):
     
     for item, count in item_counts.items():
         if item in special_offers:
-            for offer_count, offer_price in sorted(special_offers[item]):
+            for offer_count, offer_price in sorted(special_offers[item], reverse=True):
                 total_cost += (count // offer_count)*offer_price
                 count %= offer_count
             
@@ -37,5 +37,10 @@ def checkout(skus):
 
 def test_checkout():
     assert checkout("A") == 50
-    
+    assert checkout("B") == 30
+    assert checkout("ABCD") == 115
+    assert checkout("AAA") == 130
+    assert checkout("AAAAA") == 200
+
 test_checkout()
+
