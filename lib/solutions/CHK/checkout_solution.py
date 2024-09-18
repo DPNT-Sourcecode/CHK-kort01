@@ -60,9 +60,3 @@ def test_checkout():
     assert checkout("BBBEEEFFFF") == 195
 
 test_checkout()
-
-
-
-
-
-
