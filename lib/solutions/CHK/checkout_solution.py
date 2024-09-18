@@ -42,8 +42,10 @@ def test_checkout():
     assert checkout("AAA") == 130
     assert checkout("AAAAA") == 200
     assert checkout("BB") == 45
-    assert checkout("BBBEEE") == 160
+    assert checkout("BBBEEE") == 165
+    assert checkout("X") == -1
 
-test_checkout()
+#test_checkout()
+
 
 
