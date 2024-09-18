@@ -46,6 +46,3 @@ def test_checkout():
     assert checkout("X") == -1
 
 #test_checkout()
-
-
-
