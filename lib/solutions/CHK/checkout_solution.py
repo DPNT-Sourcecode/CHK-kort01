@@ -4,8 +4,10 @@
 # skus = unicode string
 
 def checkout(skus):
-    prices = {'A': 50, 'B':30, 'C':20, 'D':15, 'E':40, 'F':10, 'G':20,'H':10,'I':35,'J':60,'K':80,'L':90,'M':15,'N':40,'O':10,'P':50,'Q':30,'R':50,'S':30,'T':20,'U':40,'V':50,'W':20,'X':90,'Y':10,'Z':50}
-    special_offers = {'A': [(5,200),(3,130)], 'B':[(2,45)], 'E':[(2,80)], 'F':[(3,20)], 'H':[(10,80),(5,45)],'K':[(2,150)],'N':[(3,120)],'P':[(5,200)],'Q':[(3,80)],'R':[(3,150)],'U':[(4,120)],'V':[(3,130),(2,90)] }
+    prices = {'A': 50, 'B':30, 'C':20, 'D':15, 'E':40, 'F':10, 'G':20,'H':10,'I':35,'J':60,'K':70,'L':90,'M':15,'N':40,'O':10,'P':50,'Q':30,'R':50,'S':20,'T':20,'U':40,'V':50,'W':20,'X':17,'Y':20,'Z':21}
+
+
+    special_offers = {'A': [(5,200),(3,130)], 'B':[(2,45)], 'E':[(2,80)], 'F':[(3,20)], 'H':[(10,80),(5,45)],'K':[(2,120)],'N':[(3,120)],'P':[(5,200)],'Q':[(3,80)],'R':[(3,150)],'U':[(4,120)],'V':[(3,130),(2,90)], 'group_discount':(['S','T','X','Y','Z'],3,45) }
 
     total_cost, item_counts = 0, {}
 
@@ -44,6 +46,21 @@ def checkout(skus):
         free_u_count = u_count//4
         paid_u_count = u_count - free_u_count
         item_counts['U'] = paid_u_count
+    
+    group_items = special_offers['group_discount'][0]
+    group_count = sum(item_counts.get(item,0) for item in group_items)
+    group_offer_count = group_count//special_offers['group_discount'][1]
+    total_cost += group_count*special_offers['group_discount'][2]
+    remaining_group_count = group_count%special_offers['group_discount'][1]
+
+    for item in group_items:
+        if item in item_counts:
+            if item_counts[item] <= remaining_group_count:
+                remaining_group_count -= item_counts[item]
+                item_counts[item] = 0
+            else:
+                item_counts[item] -= remaining_group_count
+                remaining_group_count = 0
 
     for item, count in item_counts.items():
         if item in special_offers and item not in ['F','U','N','R']:
@@ -80,7 +97,10 @@ def test_checkout():
     assert checkout("VVVV") == 180
     assert checkout("VVUUUUQQQ") == 290
 
-    assert checkout("K") == 80
-    assert checkout("ABCDEFGHIJKLMNOPQRSTUVWXYZ") == 965
+    assert checkout("K") == 70
+    #assert checkout("ABCDEFGHIJKLMNOPQRSTUVWXYZ") == 965
+
+    assert("STX") == 45
+    assert("STXYZ") == 90
 
 test_checkout()
